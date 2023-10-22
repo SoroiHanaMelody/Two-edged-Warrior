@@ -8,6 +8,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class Mainmenu extends JFrame implements KeyListener {
+
     private String playerName1 = "Player";
     public Mainmenu() {
         this.setSize(1280, 720);//设置窗口大小

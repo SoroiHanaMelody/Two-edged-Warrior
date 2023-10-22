@@ -6,6 +6,8 @@ import io.github.haname.view.CustomButton;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
@@ -17,6 +19,8 @@ public class Playpage extends JFrame implements KeyListener {
     //用于储存当前背景
     private BackGround nowBg = new BackGround();
     //用于双缓存
+    private boolean Paused = false;
+    //使用一个布尔标志来控制暂停
     private Image offScreeenImage = null;
     public Playpage() {
         this.setSize(1280, 720);//设置窗口大小
@@ -27,12 +31,36 @@ public class Playpage extends JFrame implements KeyListener {
         this.addKeyListener(this);//添加键盘监听
         this.setTitle("Two-edged Warrior--Playing");//添加窗口名称
 
+        SpringLayout layout = new SpringLayout();
+        setLayout(layout);
+
         JPanel pausePanel = new JPanel();
         pausePanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
         CustomButton pause = new CustomButton("Pause",70,30,10,10,"/hover1.wav","/press1.wav");
         pausePanel.add(pause);
         pause.setVisible(true);
         this.add(pausePanel);
+        layout.putConstraint(SpringLayout.WEST, pausePanel, 1175, SpringLayout.WEST, getContentPane());
+        layout.putConstraint(SpringLayout.NORTH, pausePanel, 10, SpringLayout.NORTH, getContentPane());
+
+        //this is backButton
+        CustomButton backButton=new CustomButton("back",100,50,10,10,"/hover1.wav","/press1.wav");
+        backButton.addActionListener(e -> {
+            Paused = true;
+            int choice = JOptionPane.showConfirmDialog(
+                    Playpage.this,
+                    "Are you sure you want to return to the menu?",
+                    "Confirm", JOptionPane.YES_NO_OPTION);
+            if (choice == JOptionPane.NO_OPTION) {
+                Paused=false;
+            } else if (choice == JOptionPane.YES_OPTION) {
+                Mainmenu menuWindow = new Mainmenu();
+                Playpage.this.dispose();
+            }
+        });
+        this.add(backButton);
+        layout.putConstraint(SpringLayout.WEST, backButton, 25, SpringLayout.WEST, getContentPane());
+        layout.putConstraint(SpringLayout.NORTH, backButton, 10, SpringLayout.NORTH, getContentPane());
 
         StaticValue.init();
         for (int i = 1; i <= 2; i++) {
