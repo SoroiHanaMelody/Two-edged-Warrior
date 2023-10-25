@@ -3,6 +3,7 @@ package io.github.haname.view;
 import io.github.haname.StaticValue;
 import io.github.haname.view.BackGround;
 import io.github.haname.view.CustomButton;
+import obj.Role;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.ImageObserver;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +24,7 @@ public class Playpage extends JFrame implements KeyListener {
     private boolean Paused = false;
     //使用一个布尔标志来控制暂停
     private Image offScreeenImage = null;
+    private Role role=new Role();
     public Playpage() {
         this.setSize(1280, 720);//设置窗口大小
         this.setLocationRelativeTo(null);//设置窗口居中
@@ -63,6 +66,7 @@ public class Playpage extends JFrame implements KeyListener {
         layout.putConstraint(SpringLayout.NORTH, backButton, 10, SpringLayout.NORTH, getContentPane());
 
         StaticValue.init();
+        role = new Role(10,355);
         for (int i = 1; i <= 2; i++) {
             allBg.add(new BackGround(i, i == 2 ? true : false));
         }
@@ -83,6 +87,11 @@ public class Playpage extends JFrame implements KeyListener {
 
         //绘制背景
         graphics.drawImage(nowBg.getBgImage(), 0,0,this);
+
+        //draw Role
+        int newWidth = 100;
+        int newHeight = (int) (role.getShow().getHeight(null) * ((double) newWidth / role.getShow().getWidth(null)));
+        graphics.drawImage(role.getShow(),role.getX(), role.getY(),newWidth,newHeight,this);
 
         //将图像绘制到窗口中
         g.drawImage(offScreeenImage, 0,0,this);

@@ -42,6 +42,8 @@ public class StaticValue {
             bg = ImageIO.read(new File(path + "/Background.png"));
             bg2 = ImageIO.read(new File(path + "/Background2.png"));
 
+            stand_R = ImageIO.read(new File(path+"/Walking_016.png"));
+
         } catch (IOException e) {
 
             e.printStackTrace();
