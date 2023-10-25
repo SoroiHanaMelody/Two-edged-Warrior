@@ -15,7 +15,7 @@ import java.awt.image.ImageObserver;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Playpage extends JFrame implements KeyListener {
+public class Playpage extends JFrame implements KeyListener,Runnable {
     //用于储存所有背景
     private List<BackGround> allBg = new ArrayList<>();
     //用于储存当前背景
@@ -24,7 +24,8 @@ public class Playpage extends JFrame implements KeyListener {
     private boolean Paused = false;
     //使用一个布尔标志来控制暂停
     private Image offScreeenImage = null;
-    private Role role=new Role();
+    private Role role = new Role();
+
     public Playpage() {
         this.setSize(1280, 720);//设置窗口大小
         this.setLocationRelativeTo(null);//设置窗口居中
@@ -39,7 +40,7 @@ public class Playpage extends JFrame implements KeyListener {
 
         JPanel pausePanel = new JPanel();
         pausePanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
-        CustomButton pause = new CustomButton("Pause",70,30,10,10,"/hover1.wav","/press1.wav");
+        CustomButton pause = new CustomButton("Pause", 70, 30, 10, 10, "/hover1.wav", "/press1.wav");
         pausePanel.add(pause);
         pause.setVisible(true);
         this.add(pausePanel);
@@ -47,7 +48,7 @@ public class Playpage extends JFrame implements KeyListener {
         layout.putConstraint(SpringLayout.NORTH, pausePanel, 10, SpringLayout.NORTH, getContentPane());
 
         //this is backButton
-        CustomButton backButton=new CustomButton("back",100,50,10,10,"/hover1.wav","/press1.wav");
+        CustomButton backButton = new CustomButton("back", 100, 50, 10, 10, "/hover1.wav", "/press1.wav");
         backButton.addActionListener(e -> {
             Paused = true;
             int choice = JOptionPane.showConfirmDialog(
@@ -55,7 +56,7 @@ public class Playpage extends JFrame implements KeyListener {
                     "Are you sure you want to return to the menu?",
                     "Confirm", JOptionPane.YES_NO_OPTION);
             if (choice == JOptionPane.NO_OPTION) {
-                Paused=false;
+                Paused = false;
             } else if (choice == JOptionPane.YES_OPTION) {
                 Mainmenu menuWindow = new Mainmenu();
                 Playpage.this.dispose();
@@ -66,7 +67,7 @@ public class Playpage extends JFrame implements KeyListener {
         layout.putConstraint(SpringLayout.NORTH, backButton, 10, SpringLayout.NORTH, getContentPane());
 
         StaticValue.init();
-        role = new Role(10,355);
+        role = new Role(10, 355);
         for (int i = 1; i <= 2; i++) {
             allBg.add(new BackGround(i, i == 2 ? true : false));
         }
@@ -79,22 +80,22 @@ public class Playpage extends JFrame implements KeyListener {
     @Override
     public void paint(Graphics g) {
         if (offScreeenImage == null) {
-            offScreeenImage = createImage(1920,1080);
+            offScreeenImage = createImage(1920, 1080);
         }
 
         Graphics graphics = offScreeenImage.getGraphics();
-        graphics.fillRect(0,0,1920,1080);
+        graphics.fillRect(0, 0, 1920, 1080);
 
         //绘制背景
-        graphics.drawImage(nowBg.getBgImage(), 0,0,this);
+        graphics.drawImage(nowBg.getBgImage(), 0, 0, this);
 
         //draw Role
-        int newWidth = 100;
+        int newWidth = 100;//修改宽，做到修改整个role类的大小
         int newHeight = (int) (role.getShow().getHeight(null) * ((double) newWidth / role.getShow().getWidth(null)));
-        graphics.drawImage(role.getShow(),role.getX(), role.getY(),newWidth,newHeight,this);
+        graphics.drawImage(role.getShow(), role.getX(), role.getY(), newWidth, newHeight, this);
 
         //将图像绘制到窗口中
-        g.drawImage(offScreeenImage, 0,0,this);
+        g.drawImage(offScreeenImage, 0, 0, this);
     }
 
     @Override
@@ -104,12 +105,44 @@ public class Playpage extends JFrame implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
+        int keyCode = e.getKeyCode();
+        if (keyCode == KeyEvent.VK_D) {
+            role.rightMove();
+        }
+        if (keyCode == KeyEvent.VK_A) {
+            role.leftMove();
+        }
+        if (keyCode == KeyEvent.VK_SPACE){
 
+        }
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
+        int keyCode = e.getKeyCode();
+        if (keyCode == KeyEvent.VK_D) {
+            role.rightStop();
+        }
+        if (keyCode == KeyEvent.VK_A) {
+            role.leftStop();
+        }
+    }
 
+    @Override
+    public void run() {
+        while(true){
+            repaint();
+            try {
+                Thread.sleep(20);
+                //判断是否可以下一关之类的一个判断（可以修改为其他）
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    private void print(int x) {
+        print(x);
     }
 }
 

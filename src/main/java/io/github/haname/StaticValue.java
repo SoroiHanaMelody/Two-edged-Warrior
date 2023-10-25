@@ -4,6 +4,7 @@ package io.github.haname;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -43,6 +44,14 @@ public class StaticValue {
             bg2 = ImageIO.read(new File(path + "/Background2.png"));
 
             stand_R = ImageIO.read(new File(path+"/Walking_016.png"));
+
+            int width = stand_R.getWidth();
+            int height = stand_R.getHeight();
+            BufferedImage stand_L = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+
+            Graphics2D g2d = stand_L.createGraphics();
+            g2d.drawImage(stand_R, 0, 0, width, height, width, 0, 0, height, null);
+            g2d.dispose();
 
         } catch (IOException e) {
 
