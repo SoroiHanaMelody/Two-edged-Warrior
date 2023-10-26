@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.IOException;
 
 public class Mainmenu extends JFrame implements KeyListener {
 
@@ -61,7 +62,12 @@ public class Mainmenu extends JFrame implements KeyListener {
 
         start.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
-                Playpage playpage = new Playpage();
+                Playpage playpage = null;
+                try {
+                    playpage = new Playpage();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
                 playpage.setVisible(true);
                 Mainmenu.this.dispose();
             }

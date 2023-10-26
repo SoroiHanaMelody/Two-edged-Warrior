@@ -12,6 +12,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.ImageObserver;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,8 +26,9 @@ public class Playpage extends JFrame implements KeyListener,Runnable {
     //使用一个布尔标志来控制暂停
     private Image offScreeenImage = null;
     private Role role = new Role();
+    private Thread thread=new Thread(this);
 
-    public Playpage() {
+    public Playpage() throws IOException {
         this.setSize(1280, 720);//设置窗口大小
         this.setLocationRelativeTo(null);//设置窗口居中
         this.setVisible(true);//设置窗口可见
@@ -75,6 +77,7 @@ public class Playpage extends JFrame implements KeyListener,Runnable {
         nowBg = allBg.get(0);
         //绘制图像
         repaint();
+        thread.start();
     }
 
     @Override
@@ -105,25 +108,25 @@ public class Playpage extends JFrame implements KeyListener,Runnable {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        int keyCode = e.getKeyCode();
-        if (keyCode == KeyEvent.VK_D) {
+        int key = e.getKeyCode();
+        if (key == KeyEvent.VK_D) {
             role.rightMove();
         }
-        if (keyCode == KeyEvent.VK_A) {
+        if (key == KeyEvent.VK_A) {
             role.leftMove();
         }
-        if (keyCode == KeyEvent.VK_SPACE){
+        if (key == KeyEvent.VK_SPACE){
 
         }
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-        int keyCode = e.getKeyCode();
-        if (keyCode == KeyEvent.VK_D) {
+        int key = e.getKeyCode();
+        if (key == KeyEvent.VK_D) {
             role.rightStop();
         }
-        if (keyCode == KeyEvent.VK_A) {
+        if (key == KeyEvent.VK_A) {
             role.leftStop();
         }
     }
@@ -139,10 +142,6 @@ public class Playpage extends JFrame implements KeyListener,Runnable {
                 throw new RuntimeException(e);
             }
         }
-    }
-
-    private void print(int x) {
-        print(x);
     }
 }
 

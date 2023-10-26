@@ -31,7 +31,7 @@ public class Role implements Runnable {
     }
 
     public void leftMove() {
-        xSpeed = -5;
+        xSpeed = -6;
         if (status.indexOf("jump") != 1) {
             status = "jump--left";
         } else {
@@ -40,7 +40,7 @@ public class Role implements Runnable {
     }
 
     public void rightMove() {
-        xSpeed = 5;
+        xSpeed = 6;
         if (status.indexOf("jump") != 1) {
             status = "jump--right";
         } else {
@@ -64,15 +64,6 @@ public class Role implements Runnable {
         } else {
             status = "stop--right";
         }
-    }
-
-
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
     }
 
     public String getStatus() {
@@ -119,7 +110,7 @@ public class Role implements Runnable {
     public void run() {
         while (true) {
             if (xSpeed < 0 || xSpeed > 0) {
-                x += xSpeed;
+                x+= xSpeed;
                 if (x < 0) {
                     x = 0;
                 }
@@ -145,6 +136,13 @@ public class Role implements Runnable {
                 e.printStackTrace();
             }
         }
+    }
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
     }
 
     public void setX(int x) {

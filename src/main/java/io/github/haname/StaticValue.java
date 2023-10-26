@@ -37,17 +37,17 @@ public class StaticValue {
     public static String path = System.getProperty("user.dir") + "/src/main/resources/images";
 
     //初始化
-    public static void init() {
+    public static void init() throws IOException {
         //加载背景图片
         try {
             bg = ImageIO.read(new File(path + "/Background.png"));
             bg2 = ImageIO.read(new File(path + "/Background2.png"));
 
-            stand_R = ImageIO.read(new File(path+"/Walking_016.png"));
+            stand_R = ImageIO.read(new File(path+"/Walking_001.png"));
 
             int width = stand_R.getWidth();
             int height = stand_R.getHeight();
-            BufferedImage stand_L = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+            stand_L = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 
             Graphics2D g2d = stand_L.createGraphics();
             g2d.drawImage(stand_R, 0, 0, width, height, width, 0, 0, height, null);
@@ -57,12 +57,22 @@ public class StaticValue {
 
             e.printStackTrace();
         }
-
+        for(int i=1;i<=18;i++) {
+            try {
+                if (i < 10) {
+                    run_R.add(ImageIO.read(new File(path + "/Walking_00" + i + ".png")));
+                } else {
+                    run_R.add(ImageIO.read(new File(path + "/Walking_0" + i + ".png")));
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
         //try {
         //    obstacle.add(ImageIO.read(new File(path + "")));
         //    obstacle.add(ImageIO.read(new File(path + "")));
         //} catch (IOException e) {
         //    throw new RuntimeException(e);
         //}
-    };
+    }
 }
