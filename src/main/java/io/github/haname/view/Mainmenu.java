@@ -10,7 +10,7 @@ import java.awt.event.KeyListener;
 public class Mainmenu extends JFrame implements KeyListener {
     private String playerName1 = "Player";
     public Mainmenu() {
-        this.setSize(1280, 720);//设置窗口大小
+        this.setSize(1440, 810);//设置窗口大小
         this.setLocationRelativeTo(null);//设置窗口居中
         this.setVisible(true);//设置窗口可见
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//设置关闭键

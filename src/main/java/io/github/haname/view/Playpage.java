@@ -19,7 +19,7 @@ public class Playpage extends JFrame implements KeyListener {
     //用于双缓存
     private Image offScreeenImage = null;
     public Playpage() {
-        this.setSize(1280, 720);//设置窗口大小
+        this.setSize(1440, 810);//设置窗口大小
         this.setLocationRelativeTo(null);//设置窗口居中
         this.setVisible(true);//设置窗口可见
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//设置关闭键
@@ -47,14 +47,19 @@ public class Playpage extends JFrame implements KeyListener {
     @Override
     public void paint(Graphics g) {
         if (offScreeenImage == null) {
-            offScreeenImage = createImage(1920,1080);
+            offScreeenImage = createImage(1440,810);
         }
 
         Graphics graphics = offScreeenImage.getGraphics();
-        graphics.fillRect(0,0,1920,1080);
+        graphics.fillRect(0,0,1440,810);
 
         //绘制背景
         graphics.drawImage(nowBg.getBgImage(), 0,0,this);
+
+        //绘制障碍物
+        for (Obstacle ob : nowBg.getObstacleList()) {
+            graphics.drawImage(ob.getShow(),ob.getX(),ob.getY(),this);
+        }
 
         //将图像绘制到窗口中
         g.drawImage(offScreeenImage, 0,0,this);
