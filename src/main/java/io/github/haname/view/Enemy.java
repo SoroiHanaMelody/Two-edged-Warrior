@@ -1,9 +1,11 @@
 package io.github.haname.view;
 
 import io.github.haname.StaticValue;
+import io.github.haname.service.AnimeEnemyTask;
 
 import java.awt.image.BufferedImage;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class Enemy implements Runnable {
     //储存当前坐标
@@ -36,6 +38,9 @@ public class Enemy implements Runnable {
     //用于循环动画
     private int currentImageIndex;
 
+    AnimeEnemyTask.walkL wl = new AnimeEnemyTask.walkL();
+    AnimeEnemyTask.walkR wr = new AnimeEnemyTask.walkR();
+
     //敌人1的构造函数
     public Enemy(int x, int y , boolean face_to, int type, BackGround bg) {
         this.x = x;
@@ -43,8 +48,7 @@ public class Enemy implements Runnable {
         this.face_to = face_to;
         this.type = type;
         this.bg = bg;
-        show = StaticValue.enemy1_walk_R.get(0);
-        thread.start();
+        TaskManager.INSTANCE.scheduleWithFixedDelay("walkL", wl,0,50, TimeUnit.MILLISECONDS);
     }
 
     //敌人2的构造函数
@@ -78,7 +82,7 @@ public class Enemy implements Runnable {
                 }
                 image_type = image_type ==1 ? 0 : 1;
 
-                show = StaticValue.enemy1_walk_R.get(image_type);
+                TaskManager.INSTANCE.scheduleWithFixedDelay("walkR", wr,0,50, TimeUnit.MILLISECONDS);
             }
 
             //定义两个boolean变量
