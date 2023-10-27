@@ -15,7 +15,7 @@ public class Obstacle {
     //定义当前的场景对象
     private BackGround bg = null;
 
-    public Obstacle(int x,int y,int type,BackGround bg) {
+    public Obstacle(int x, int y, int type, BackGround bg) {
         this.x = x;
         this.y = y;
         this.type = type;

@@ -2,9 +2,7 @@ package io.github.haname.view;
 
 import io.github.haname.StaticValue;
 
-import javax.swing.border.EmptyBorder;
 import java.awt.image.BufferedImage;
-import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,11 +21,11 @@ public class BackGround {
     //存放所有敌人
     private List<Enemy> enemyList = new ArrayList<>();
 
-    public BackGround(){
+    public BackGround() {
 
     }
 
-    public BackGround (int sort, boolean flag) {
+    public BackGround(int sort, boolean flag) {
         this.sort = sort;
         this.flag = flag;
 
@@ -40,22 +38,21 @@ public class BackGround {
         if (sort == 1) {
             //绘制第一关的地面，type=1为上地面
             for (int i = 0; i < 25; i++) {
-                obstacleList.add(new Obstacle(i * 60, 570,0,this));
+                obstacleList.add(new Obstacle(i * 60, 570, 0, this));
             }
 
-            for (int j = 0; j <= 120; j+= 60) {
-                for (int i = 0;i < 25;i++) {
-                    obstacleList.add(new Obstacle(i * 60,810-j,1,this));
+            for (int j = 0; j <= 120; j += 60) {
+                for (int i = 0; i < 25; i++) {
+                    obstacleList.add(new Obstacle(i * 60, 810 - j, 1, this));
                 }
             }
         }
 
         //添加敌人
-        enemyList.add(new Enemy(80,500,false,1,this));
+        enemyList.add(new Enemy(80, 500, false, 1, this));
     }
 
     //判断是否为第一关
-
 
 
     public BufferedImage getBgImage() {

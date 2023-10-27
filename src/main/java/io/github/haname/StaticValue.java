@@ -1,16 +1,14 @@
 package io.github.haname;
 
 
-
 import javax.imageio.ImageIO;
-import javax.imageio.ImageReader;
+import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.awt.geom.AffineTransform;
 
 public class StaticValue {
     //背景
@@ -19,7 +17,7 @@ public class StaticValue {
     //人物左跳跃
     public static BufferedImage jump_L = null;
     //人物右跳跃
-    public  static BufferedImage jump_R = null;
+    public static BufferedImage jump_R = null;
     //人物左站立
     public static BufferedImage stand_L = null;
     //人物右站立
@@ -96,5 +94,7 @@ public class StaticValue {
 //                throw new RuntimeException(e);
 //            }
 //        }
-    };
+    }
+
+    ;
 }

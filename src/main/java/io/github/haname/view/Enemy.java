@@ -4,14 +4,12 @@ import io.github.haname.StaticValue;
 import io.github.haname.service.AnimeEnemyTask;
 
 import java.awt.image.BufferedImage;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class Enemy implements Runnable {
     //储存当前坐标
-    private int x,y;
+    private int x, y;
     //储存敌人类型
-    private  int type;
+    private int type;
     //敌人向左移动的动画路径
     private String enemyWalkL;
     //敌人向右移动的动画路径
@@ -32,7 +30,7 @@ public class Enemy implements Runnable {
     private int max_up = 0;
     private int max_down = 0;
     //定义线程对象
-    private Thread thread =new Thread(this);
+    private Thread thread = new Thread(this);
     //定义当前图片转态
     private int image_type = 0;
     //用于循环动画
@@ -42,7 +40,7 @@ public class Enemy implements Runnable {
     AnimeEnemyTask.walkR wr = new AnimeEnemyTask.walkR();
 
     //敌人1的构造函数
-    public Enemy(int x, int y , boolean face_to, int type, BackGround bg) {
+    public Enemy(int x, int y, boolean face_to, int type, BackGround bg) {
         this.x = x;
         this.y = y;
         this.face_to = face_to;
@@ -54,7 +52,7 @@ public class Enemy implements Runnable {
     }
 
     //敌人2的构造函数
-    public Enemy(int x,int y,boolean face_to, int type, int max_up,int max_down,BackGround bg) {
+    public Enemy(int x, int y, boolean face_to, int type, int max_up, int max_down, BackGround bg) {
         this.x = x;
         this.y = y;
         this.face_to = face_to;
@@ -95,7 +93,7 @@ public class Enemy implements Runnable {
                 } else {
                     this.x += 2;
                 }
-                image_type = image_type ==1 ? 0 : 1;
+                image_type = image_type == 1 ? 0 : 1;
 
                 //TaskManager.INSTANCE.scheduleWithFixedDelay("walkR", wr,0,50, TimeUnit.MILLISECONDS);
                 show = StaticValue.enemy1_walk_R.get(image_type);
@@ -108,20 +106,19 @@ public class Enemy implements Runnable {
             for (int i = 0; i < bg.getObstacleList().size(); i++) {
                 Obstacle ob1 = bg.getObstacleList().get(i);
                 //判断是否可以向右走
-                if (ob1.getX() == this.x +60 && (ob1.getY() + 60 > this.y && ob1.getY() -60 < this.y)) {
+                if (ob1.getX() == this.x + 60 && (ob1.getY() + 60 > this.y && ob1.getY() - 60 < this.y)) {
                     canRight = false;
                 }
 
                 //判断是否可以向左走
-                if (ob1.getX() == this.x -60 && (ob1.getY() + 60 > this.y && ob1.getY() -60 < this.y)) {
+                if (ob1.getX() == this.x - 60 && (ob1.getY() + 60 > this.y && ob1.getY() - 60 < this.y)) {
                     canLeft = false;
                 }
             }
 
             if (face_to && !canLeft || this.x == 0) {
                 face_to = false;
-            }
-            else if ((!face_to) && (!canRight) || this.x == 810) {
+            } else if ((!face_to) && (!canRight) || this.x == 810) {
                 face_to = true;
             }
 

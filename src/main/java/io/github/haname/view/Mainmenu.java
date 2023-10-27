@@ -9,6 +9,7 @@ import java.awt.event.KeyListener;
 
 public class Mainmenu extends JFrame implements KeyListener {
     private String playerName1 = "Player";
+
     public Mainmenu() {
         this.setSize(1440, 810);//设置窗口大小
         this.setLocationRelativeTo(null);//设置窗口居中
@@ -27,22 +28,22 @@ public class Mainmenu extends JFrame implements KeyListener {
         PlayerPanel.setLayout(new GridBagLayout());
 
         // 创建 Close 按钮并指定位置和父容器
-        CustomButton closeButton = new CustomButton("Close Button", 200, 50,30,30,"/hover1.wav","/press1.wav");
+        CustomButton closeButton = new CustomButton("Close Button", 200, 50, 30, 30, "/hover1.wav", "/press1.wav");
         //String relativePath = "/FnP73wlaUAUctyL.jpg";
         //closeButton.setIcon(new ImageIcon(getClass().getResource(relativePath)));
-        addButton(ButtonPanel, closeButton,3);
+        addButton(ButtonPanel, closeButton, 3);
 
         // 添加垂直间距
         //ButtonPanel.add(Box.createVerticalStrut(25)); // 10 是间距的高度
 
         // 创建另一个自定义按钮并指定位置和父容器
-        CustomButton start = new CustomButton("Start", 200, 50,30,30, "/hover1.wav","/press1.wav");
-        addButton(ButtonPanel, start,1);
+        CustomButton start = new CustomButton("Start", 200, 50, 30, 30, "/hover1.wav", "/press1.wav");
+        addButton(ButtonPanel, start, 1);
 
-        CustomButton setting = new CustomButton("Setting", 200,50,30,30, "/hover1.wav","/press1.wav");
-        addButton(ButtonPanel, setting,2);
+        CustomButton setting = new CustomButton("Setting", 200, 50, 30, 30, "/hover1.wav", "/press1.wav");
+        addButton(ButtonPanel, setting, 2);
 
-        CustomButton player = new CustomButton("Player",150,30,30,30, "/hover1.wav","/press1.wav");
+        CustomButton player = new CustomButton("Player", 150, 30, 30, 30, "/hover1.wav", "/press1.wav");
         addButton(PlayerPanel, player, 0);
 
         // 添加按钮面板到主窗口的 EAST 区域
@@ -53,13 +54,13 @@ public class Mainmenu extends JFrame implements KeyListener {
         ButtonPanel.setBorder(BorderFactory.createEmptyBorder(200, 0, 0, 20));
 
         closeButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e){
+            public void actionPerformed(ActionEvent e) {
                 System.exit(0);
             }
         });
 
         start.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e){
+            public void actionPerformed(ActionEvent e) {
                 Playpage playpage = new Playpage();
                 playpage.setVisible(true);
                 Mainmenu.this.dispose();
@@ -67,7 +68,7 @@ public class Mainmenu extends JFrame implements KeyListener {
         });
 
         setting.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e){
+            public void actionPerformed(ActionEvent e) {
 
             }
         });
@@ -78,10 +79,10 @@ public class Mainmenu extends JFrame implements KeyListener {
                 playerInf.setTitle("Player Information");
                 playerInf.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
                 playerInf.setLayout(new GridBagLayout());
-                playerInf.setPreferredSize(new Dimension(400,300));
+                playerInf.setPreferredSize(new Dimension(400, 300));
 
                 GridBagConstraints constraints = new GridBagConstraints();
-                constraints.insets = new Insets(10,10,10,10);
+                constraints.insets = new Insets(10, 10, 10, 10);
 
                 JTextField playerName = new JTextField(20);
                 constraints.gridx = 0;
@@ -91,13 +92,13 @@ public class Mainmenu extends JFrame implements KeyListener {
                 JTextField password = new JTextField(20);
                 constraints.gridx = 0;
                 constraints.gridy = 1;
-                playerInf.add(password,constraints);
+                playerInf.add(password, constraints);
 
-                CustomButton confirm = new CustomButton("Confirm",80,30,5,5, "/hover1.wav","/press1.wav");
+                CustomButton confirm = new CustomButton("Confirm", 80, 30, 5, 5, "/hover1.wav", "/press1.wav");
                 playerInf.add(confirm, constraints);
                 confirm.addActionListener(new ActionListener() {
                     @Override
-                    public void actionPerformed(ActionEvent e){
+                    public void actionPerformed(ActionEvent e) {
                         playerName1 = playerName.getText();
                         player.setText(playerName1);
                         playerInf.dispose();
@@ -116,14 +117,13 @@ public class Mainmenu extends JFrame implements KeyListener {
 
     private void addButton(JPanel panel, JButton button, int position) {
         GridBagConstraints constraints = new GridBagConstraints();
-        constraints.insets = new Insets(25,5,25,5);
+        constraints.insets = new Insets(25, 5, 25, 5);
         constraints.fill = GridBagConstraints.VERTICAL;
         //constraints.anchor = GridBagConstraints.CENTER;
         constraints.gridx = 0;
         constraints.gridy = position;
-        panel.add(button,constraints);
+        panel.add(button, constraints);
     }
-
 
 
     public static void main(String[] args) {

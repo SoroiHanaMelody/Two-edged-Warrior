@@ -3,12 +3,9 @@ package io.github.haname.view;
 import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.RoundRectangle2D;
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
@@ -34,7 +31,6 @@ public class CustomButton extends JButton {
         try {
 
 
-
             URL hoverPath = getClass().getResource(hoverpath);
             AudioInputStream hoverInputStream = AudioSystem.getAudioInputStream(hoverPath);
             hoverClip = AudioSystem.getClip();
@@ -44,7 +40,7 @@ public class CustomButton extends JButton {
             AudioInputStream clickInputStream = AudioSystem.getAudioInputStream(clickPath);
             clickClip = AudioSystem.getClip();
             clickClip.open(clickInputStream);
-        } catch (UnsupportedAudioFileException|IOException|LineUnavailableException e) {
+        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
             e.printStackTrace();
         }
 
