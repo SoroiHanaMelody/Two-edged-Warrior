@@ -1,4 +1,4 @@
-package io.github.haname.view;
+package io.github.haname.service.manager;
 
 import java.util.HashMap;
 import java.util.Map;

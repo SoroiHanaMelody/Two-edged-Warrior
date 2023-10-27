@@ -53,18 +53,12 @@ public class Mainmenu extends JFrame implements KeyListener {
         // 添加空边框来创建间距
         ButtonPanel.setBorder(BorderFactory.createEmptyBorder(200, 0, 0, 20));
 
-        closeButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                System.exit(0);
-            }
-        });
+        closeButton.addActionListener(e -> System.exit(0));
 
-        start.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                Playpage playpage = new Playpage();
-                playpage.setVisible(true);
-                Mainmenu.this.dispose();
-            }
+        start.addActionListener(e -> {
+            Playpage playpage = new Playpage();
+            playpage.setVisible(true);
+            Mainmenu.this.dispose();
         });
 
         setting.addActionListener(new ActionListener() {
@@ -73,46 +67,49 @@ public class Mainmenu extends JFrame implements KeyListener {
             }
         });
 
-        player.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                JDialog playerInf = new JDialog();
-                playerInf.setTitle("Player Information");
-                playerInf.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-                playerInf.setLayout(new GridBagLayout());
-                playerInf.setPreferredSize(new Dimension(400, 300));
+        player.addActionListener(e -> {
 
-                GridBagConstraints constraints = new GridBagConstraints();
-                constraints.insets = new Insets(10, 10, 10, 10);
+            JDialog playerInf = new JDialog();
+            playerInf.setTitle("Player Information");
+            playerInf.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+            playerInf.setLayout(new GridBagLayout());
+            playerInf.setPreferredSize(new Dimension(400, 300));
 
-                JTextField playerName = new JTextField(20);
-                constraints.gridx = 0;
-                constraints.gridy = 0;
-                playerInf.add(playerName, constraints);
+            GridBagConstraints constraints = new GridBagConstraints();
+            constraints.insets = new Insets(10, 10, 10, 10);
 
-                JTextField password = new JTextField(20);
-                constraints.gridx = 0;
-                constraints.gridy = 1;
-                playerInf.add(password, constraints);
+            JTextField playerName = new JTextField(20);
+            constraints.gridx = 0;
+            constraints.gridy = 0;
+            playerInf.add(playerName, constraints);
 
-                CustomButton confirm = new CustomButton("Confirm", 80, 30, 5, 5, "/hover1.wav", "/press1.wav");
-                playerInf.add(confirm, constraints);
-                confirm.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        playerName1 = playerName.getText();
-                        player.setText(playerName1);
-                        playerInf.dispose();
-                    }
-                });
+            JTextField password = new JTextField(20);
+            constraints.gridx = 0;
+            constraints.gridy = 1;
+            playerInf.add(password, constraints);
 
-                playerInf.add(playerName);
-                playerInf.add(confirm);
-                playerInf.pack();
-                playerInf.setVisible(true);
-            }
-        });
+            CustomButton confirm = new CustomButton("Confirm", 80, 30, 5, 5, "/hover1.wav", "/press1.wav");
+            playerInf.add(confirm, constraints);
+            confirm.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    playerName1 = playerName.getText();
+                    player.setText(playerName1);
+                    playerInf.dispose();
+                }
+            });
+
+            playerInf.add(playerName);
+            playerInf.add(confirm);
+            playerInf.pack();
+            playerInf.setVisible(true);
+    });
 
 
+}
+
+    public static void main(String[] args) {
+        Mainmenu mainmenu = new Mainmenu();
     }
 
     private void addButton(JPanel panel, JButton button, int position) {
@@ -123,11 +120,6 @@ public class Mainmenu extends JFrame implements KeyListener {
         constraints.gridx = 0;
         constraints.gridy = position;
         panel.add(button, constraints);
-    }
-
-
-    public static void main(String[] args) {
-        Mainmenu mainmenu = new Mainmenu();
     }
 
     @Override

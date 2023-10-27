@@ -1,12 +1,43 @@
 package io.github.haname.view;
 
 import io.github.haname.StaticValue;
+import io.github.haname.model.Enemy;
 
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class BackGround {
+    public static List<BufferedImage> backGroundImages = new ArrayList<>();
+
+    static {
+        //加载背景图片
+        try {
+            URL backgroundImageUrl = Enemy.class.getResource("/images");
+            if (backgroundImageUrl == null) {
+                throw new RuntimeException("Cannot find resource: /images");
+            }
+
+            File backgroundImageFile = new File(backgroundImageUrl.getFile());
+            File[] backgroundImageFiles = backgroundImageFile.listFiles(file -> file.getName().startsWith("Background") && file.getName().endsWith(".png"));
+            if (backgroundImageFiles != null) {
+                Arrays.stream(backgroundImageFiles).sorted(File::compareTo).forEach(file -> {
+                    try {
+                        backGroundImages.add(ImageIO.read(file));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     //当前场景的图片
     private BufferedImage bgImage = null;
@@ -30,9 +61,9 @@ public class BackGround {
         this.flag = flag;
 
         if (flag) {
-            bgImage = StaticValue.bg2;
+            bgImage = backGroundImages.get(1);
         } else {
-            bgImage = StaticValue.bg;
+            bgImage = backGroundImages.get(0);
         }
 
         if (sort == 1) {

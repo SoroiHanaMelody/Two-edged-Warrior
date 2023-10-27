@@ -1,6 +1,9 @@
 package io.github.haname.view;
 
 import io.github.haname.StaticValue;
+import io.github.haname.model.Enemy;
+import io.github.haname.service.manager.TaskManager;
+import io.github.haname.service.task.EnemyMoveTask;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,6 +11,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class Playpage extends JFrame implements KeyListener {
     //用于储存所有背景
@@ -35,14 +39,14 @@ public class Playpage extends JFrame implements KeyListener {
 
         StaticValue.init();
         for (int i = 1; i <= 2; i++) {
-            allBg.add(new BackGround(i, i == 2 ? true : false));
+            allBg.add(new BackGround(i, i == 2));
         }
         //将第一个场景设置为当前场景
         nowBg = allBg.get(0);
+        nowBg.getEnemyList().forEach(enemy -> TaskManager.INSTANCE.scheduleWithFixedDelay("enemyMove", new EnemyMoveTask(enemy), 0, 50, TimeUnit.MILLISECONDS));
+
         //绘制图像
         repaint();
-
-
     }
 
     @Override
