@@ -38,7 +38,7 @@ public class Enemy implements Runnable {
     //用于循环动画
     private int currentImageIndex;
 
-    AnimeEnemyTask.walkL wl = new AnimeEnemyTask.walkL();
+    Runnable wl = new AnimeEnemyTask.walkL();
     AnimeEnemyTask.walkR wr = new AnimeEnemyTask.walkR();
 
     //敌人1的构造函数
@@ -48,7 +48,9 @@ public class Enemy implements Runnable {
         this.face_to = face_to;
         this.type = type;
         this.bg = bg;
-        TaskManager.INSTANCE.scheduleWithFixedDelay("walkL", wl,0,50, TimeUnit.MILLISECONDS);
+        //TaskManager.INSTANCE.scheduleWithFixedDelay("walkL", wl,0,50, TimeUnit.MILLISECONDS);
+        show = StaticValue.enemy1_walk_R.get(0);
+        thread.start();
     }
 
     //敌人2的构造函数
@@ -61,7 +63,7 @@ public class Enemy implements Runnable {
         this.max_down = max_down;
         this.bg = bg;
         show = StaticValue.enemy2.get(0);
-        thread.start();
+        //thread.start();
     }
 
     //死亡方法
@@ -69,6 +71,19 @@ public class Enemy implements Runnable {
         show = StaticValue.enemy1_walk_R.get(1);
         this.bg.getEnemyList().remove(this);
     }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public BufferedImage getShow() {
+        return show;
+    }
+
 
     @Override
     public void run() {
@@ -82,7 +97,8 @@ public class Enemy implements Runnable {
                 }
                 image_type = image_type ==1 ? 0 : 1;
 
-                TaskManager.INSTANCE.scheduleWithFixedDelay("walkR", wr,0,50, TimeUnit.MILLISECONDS);
+                //TaskManager.INSTANCE.scheduleWithFixedDelay("walkR", wr,0,50, TimeUnit.MILLISECONDS);
+                show = StaticValue.enemy1_walk_R.get(image_type);
             }
 
             //定义两个boolean变量
@@ -92,21 +108,27 @@ public class Enemy implements Runnable {
             for (int i = 0; i < bg.getObstacleList().size(); i++) {
                 Obstacle ob1 = bg.getObstacleList().get(i);
                 //判断是否可以向右走
-                if (ob1.getX() == this.x +36 && (ob1.getY() + 65 > this.y && ob1.getY() -35 < this.y)) {
+                if (ob1.getX() == this.x +60 && (ob1.getY() + 60 > this.y && ob1.getY() -60 < this.y)) {
                     canRight = false;
                 }
 
                 //判断是否可以向左走
-                if (ob1.getX() == this.x -36 && (ob1.getY() + 65 > this.y && ob1.getY() -35 < this.y)) {
+                if (ob1.getX() == this.x -60 && (ob1.getY() + 60 > this.y && ob1.getY() -60 < this.y)) {
                     canLeft = false;
                 }
+            }
 
-                if (face_to && !canLeft || this.x == 0) {
-                    face_to = false;
-                }
-                else if ((!face_to) && (!canRight) || this.x == 764) {
-                    face_to = true;
-                }
+            if (face_to && !canLeft || this.x == 0) {
+                face_to = false;
+            }
+            else if ((!face_to) && (!canRight) || this.x == 810) {
+                face_to = true;
+            }
+
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
             }
         }
     }

@@ -49,6 +49,9 @@ public class BackGround {
                 }
             }
         }
+
+        //添加敌人
+        enemyList.add(new Enemy(80,500,false,1,this));
     }
 
     //判断是否为第一关

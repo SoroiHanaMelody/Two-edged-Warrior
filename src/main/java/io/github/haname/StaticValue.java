@@ -89,12 +89,12 @@ public class StaticValue {
         }
 
         //加载怪物2
-        for (int i = 1; i <= 3; i++) {
-            try {
-                enemy2.add(ImageIO.read(new File(path + "" + "")));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
+//        for (int i = 1; i <= 3; i++) {
+//            try {
+//                enemy2.add(ImageIO.read(new File(path + "" + "")));
+//            } catch (IOException e) {
+//                throw new RuntimeException(e);
+//            }
+//        }
     };
 }

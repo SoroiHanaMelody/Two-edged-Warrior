@@ -42,6 +42,8 @@ public class Playpage extends JFrame implements KeyListener {
         nowBg = allBg.get(0);
         //绘制图像
         repaint();
+
+
     }
 
     @Override
@@ -55,6 +57,11 @@ public class Playpage extends JFrame implements KeyListener {
 
         //绘制背景
         graphics.drawImage(nowBg.getBgImage(), 0,0,this);
+
+        //绘制敌人
+        for (Enemy e : nowBg.getEnemyList()) {
+            graphics.drawImage(e.getShow(), e.getX(), e.getY(), this);
+        }
 
         //绘制障碍物
         for (Obstacle ob : nowBg.getObstacleList()) {
