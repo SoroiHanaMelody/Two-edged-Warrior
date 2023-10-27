@@ -1,7 +1,4 @@
-package io.github.haname.view;
-
-import io.github.haname.StaticValue;
-import io.github.haname.model.Enemy;
+package io.github.haname.model;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;

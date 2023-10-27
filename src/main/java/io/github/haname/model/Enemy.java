@@ -3,8 +3,6 @@ package io.github.haname.model;
 import io.github.haname.StaticValue;
 import io.github.haname.service.image.ImageUtils;
 import io.github.haname.service.task.EnemyMoveTask;
-import io.github.haname.view.BackGround;
-import io.github.haname.view.Obstacle;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;

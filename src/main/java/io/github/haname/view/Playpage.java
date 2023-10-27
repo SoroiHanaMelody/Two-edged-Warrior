@@ -1,7 +1,9 @@
 package io.github.haname.view;
 
 import io.github.haname.StaticValue;
+import io.github.haname.model.BackGround;
 import io.github.haname.model.Enemy;
+import io.github.haname.model.Obstacle;
 import io.github.haname.service.manager.TaskManager;
 import io.github.haname.service.task.EnemyMoveTask;
 

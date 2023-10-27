@@ -1,4 +1,4 @@
-package io.github.haname.view;
+package io.github.haname.model;
 
 import io.github.haname.StaticValue;
 
