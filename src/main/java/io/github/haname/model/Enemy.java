@@ -2,9 +2,12 @@ package io.github.haname.model;
 
 import io.github.haname.StaticValue;
 import io.github.haname.service.image.ImageUtils;
+import io.github.haname.service.image.inputEnemy;
 import io.github.haname.service.task.EnemyMoveTask;
+import io.github.haname.view.Playpage;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -13,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Enemy {
+public class Enemy extends JPanel {
     //怪物向右走动画
     public static List<BufferedImage> walkRightAnim = new ArrayList<>();
     //怪物向左走动画
@@ -53,16 +56,6 @@ public class Enemy {
     private int x, y;
     //储存敌人类型
     private int type;
-    //敌人向左移动的动画路径
-    private String enemyWalkL;
-    //敌人向右移动的动画路径
-    private String enemyWalkR;
-    //敌人向左跳跃的动画路径
-    private String enemyJumpL;
-    //敌人向右跳跃的动画路径
-    private String enemyJumpR;
-    //敌人死亡的动画路径
-    private String enemyDeath;
     //判断敌人运动方向
     private boolean faceTo = true;
     //用于显示敌人的当前图像
@@ -84,8 +77,7 @@ public class Enemy {
         this.faceTo = faceTo;
         this.type = type;
         this.bg = bg;
-        //TaskManager.INSTANCE.scheduleWithFixedDelay("walkL", wl,0,50, TimeUnit.MILLISECONDS);
-        show = walkRightAnim.get(0);
+        show = walkRightAnim.get(1);
     }
 
     //敌人2的构造函数
@@ -101,11 +93,10 @@ public class Enemy {
     }
 
     //死亡方法
-    public void death() {
-        show = walkRightAnim.get(1);
-        this.bg.getEnemyList().remove(this);
-    }
-
+//    public void death() {
+//        show = walkRightAnim.get(1);
+//        this.bg.getEnemyList().remove(this);
+//    }
     public int getX() {
         return x;
     }
@@ -118,40 +109,75 @@ public class Enemy {
         return show;
     }
 
+    public int getType() {return type;}
+
+
+
     public void move() {
+        //定义两个boolean变量
+        boolean canLeft = true;
+        boolean canRight = true;
+
         if (type == 1) {
             if (faceTo) {
-                this.x -= 2;
+                this.x += 10;
             } else {
-                this.x += 2;
+                this.x -= 10;
             }
 
             imageType = imageType == 1 ? 0 : 1;
 
             show = walkRightAnim.get(imageType);
-        }
 
-        //定义两个boolean变量
-        boolean canLeft = true;
-        boolean canRight = true;
+            for (int i = 0; i < bg.getObstacleList().size(); i++) {
+                Obstacle ob1 = bg.getObstacleList().get(i);
+                //判断是否可以向右走
+                if (ob1.getX() == this.x + 60 && (ob1.getY() + 60 > this.y && ob1.getY() - 60 < this.y)) {
+                    canRight = false;
+                }
 
-        for (int i = 0; i < bg.getObstacleList().size(); i++) {
-            Obstacle ob1 = bg.getObstacleList().get(i);
-            //判断是否可以向右走
-            if (ob1.getX() == this.x + 60 && (ob1.getY() + 60 > this.y && ob1.getY() - 60 < this.y)) {
-                canRight = false;
+                //判断是否可以向左走
+                if (ob1.getX() == this.x - 60 && (ob1.getY() + 60 > this.y && ob1.getY() - 60 < this.y)) {
+                    canLeft = false;
+                }
             }
 
-            //判断是否可以向左走
-            if (ob1.getX() == this.x - 60 && (ob1.getY() + 60 > this.y && ob1.getY() - 60 < this.y)) {
-                canLeft = false;
+            if ((!faceTo) && (!canLeft) || this.x == 0) {
+                faceTo = true;
+            } else if (faceTo && (!canRight) || this.x == 810) {
+                faceTo = false;
             }
-        }
 
-        if (faceTo && !canLeft || this.x == 0) {
-            faceTo = false;
-        } else if ((!faceTo) && (!canRight) || this.x == 810) {
-            faceTo = true;
+            System.out.println(type);
+            System.out.println(faceTo);
+            System.out.println(x);
+            System.out.println(imageType);
         }
+//        for (int i = 0; i < bg.getObstacleList().size(); i++) {
+//            Obstacle ob1 = bg.getObstacleList().get(i);
+//            //判断是否可以向右走
+//            if (ob1.getX() == this.x + 60 && (ob1.getY() + 60 > this.y && ob1.getY() - 60 < this.y)) {
+//                canRight = false;
+//            }
+//
+//            //判断是否可以向左走
+//            if (ob1.getX() == this.x - 60 && (ob1.getY() + 60 > this.y && ob1.getY() - 60 < this.y)) {
+//                canLeft = false;
+//            }
+//        }
+
+//        if ((!faceTo) && (!canLeft) || this.x == 0) {
+//            faceTo = true;
+//        } else if (faceTo && (!canRight) || this.x == 810) {
+//            faceTo = false;
+//        }
+//
+//            System.out.println(type);
+//            System.out.println(faceTo);
+//            System.out.println(x);
+//            System.out.println(imageType);
+//            System.out.println(canLeft);
+//            System.out.println(canRight);
+//        }
     }
 }

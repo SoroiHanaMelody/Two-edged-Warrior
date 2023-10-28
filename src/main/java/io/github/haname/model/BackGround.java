@@ -1,6 +1,7 @@
 package io.github.haname.model;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -9,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class BackGround {
+public class BackGround extends JFrame {
     public static List<BufferedImage> backGroundImages = new ArrayList<>();
 
     static {
@@ -69,15 +70,18 @@ public class BackGround {
                 obstacleList.add(new Obstacle(i * 60, 570, 0, this));
             }
 
-            for (int j = 0; j <= 120; j += 60) {
+            for (int j = 0; j <= 180; j += 60) {
                 for (int i = 0; i < 25; i++) {
                     obstacleList.add(new Obstacle(i * 60, 810 - j, 1, this));
                 }
             }
         }
+        JPanel enemyPanel = new JPanel();
+        enemyPanel.setBounds(0,0,1440,810);
+        this.add(enemyPanel);
 
         //添加敌人
-        enemyList.add(new Enemy(80, 500, false, 1, this));
+        enemyList.add(new Enemy(80, 500, true, 1, this));
     }
 
     //判断是否为第一关
