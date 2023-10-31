@@ -2,6 +2,7 @@ package io.github.haname.model;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -50,6 +51,13 @@ public class BackGround extends JFrame {
     //存放所有敌人
     private List<Enemy> enemyList = new ArrayList<>();
 
+    private JPanel enemyPanel;
+
+    private Enemy enemy;
+    public void displayEnemyImage(Enemy enemy) {
+        BufferedImage enemyImage = enemy.getShow();
+    }
+
     public BackGround() {
 
     }
@@ -76,13 +84,17 @@ public class BackGround extends JFrame {
                 }
             }
         }
-        JPanel enemyPanel = new JPanel();
-        enemyPanel.setBounds(0,0,1440,810);
-        this.add(enemyPanel);
+
+        enemyPanel = new JPanel();
+        enemyPanel.setLayout(null); // 可以根据需要更改布局管理器
+        enemyPanel.setPreferredSize(new Dimension(1440, 810)); // 设置面板大小
+        enemyPanel.setBounds(0, 0, 1440, 810); // 设置面板位置
 
         //添加敌人
-        enemyList.add(new Enemy(80, 500, true, 1, this));
+        Enemy enemy =new Enemy(80, 500, true, 1, this)
+        enemyList.add(enemy);
     }
+
 
     //判断是否为第一关
 
@@ -105,5 +117,9 @@ public class BackGround extends JFrame {
 
     public List<Enemy> getEnemyList() {
         return enemyList;
+    }
+
+    public JPanel getEnemyPanel() {
+        return enemyPanel;
     }
 }

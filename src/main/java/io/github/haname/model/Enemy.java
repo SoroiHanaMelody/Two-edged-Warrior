@@ -2,12 +2,11 @@ package io.github.haname.model;
 
 import io.github.haname.StaticValue;
 import io.github.haname.service.image.ImageUtils;
-import io.github.haname.service.image.inputEnemy;
 import io.github.haname.service.task.EnemyMoveTask;
-import io.github.haname.view.Playpage;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -70,6 +69,8 @@ public class Enemy extends JPanel {
     //用于循环动画
     private int currentImageIndex;
 
+    private Image offScreeenImage = null;
+
     //敌人1的构造函数
     public Enemy(int x, int y, boolean faceTo, int type, BackGround bg) {
         this.x = x;
@@ -90,6 +91,13 @@ public class Enemy extends JPanel {
         this.maxDown = maxDown;
         this.bg = bg;
         show = StaticValue.enemy2.get(0);
+    }
+
+    public void addToPanel(JPanel panel, BufferedImage show, int x, int y) {
+        JLabel label = new JLabel(new ImageIcon(this.show));
+        label.setBounds(this.x, this.y, this.show.getWidth(), this.show.getHeight()); // 根据需要设置位置
+        panel.add(label);
+        repaint();
     }
 
     //死亡方法
@@ -128,6 +136,10 @@ public class Enemy extends JPanel {
             imageType = imageType == 1 ? 0 : 1;
 
             show = walkRightAnim.get(imageType);
+
+            //addToPanel(bg.getEnemyPanel(),show,this.x,this.y);
+
+            //show.displayEnemyImage;
 
             for (int i = 0; i < bg.getObstacleList().size(); i++) {
                 Obstacle ob1 = bg.getObstacleList().get(i);
@@ -179,5 +191,28 @@ public class Enemy extends JPanel {
 //            System.out.println(canLeft);
 //            System.out.println(canRight);
 //        }
+    }
+
+//    @Override
+//    public void paint(Graphics g) {
+//        if (offScreeenImage == null) {
+//            offScreeenImage = createImage(show.getWidth(), show.getHeight());
+//        }
+//
+//        Graphics2D graphics = (Graphics2D) offScreeenImage.getGraphics();
+//        AlphaComposite alphaComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f); // 透明度设置为0.5
+//        graphics.setComposite(alphaComposite);
+//        graphics.setColor(new Color(0, 0, 0, 0)); // 使用透明色
+//        graphics.fillRect(0, 0, 1440, 810);
+//
+//        graphics.drawImage(getShow(), getX(), getY(), this);
+//    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Graphics2D g2d = (Graphics2D) g.create();
+        g2d.drawImage(show, x, y, this);
+        g2d.dispose();
     }
 }
