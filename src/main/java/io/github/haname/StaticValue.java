@@ -1,6 +1,8 @@
 package io.github.haname;
 
 import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -35,6 +37,14 @@ public class StaticValue {
         try {
             obstacle.add(ImageIO.read(new File(path + "/Ground1.png")));
             obstacle.add(ImageIO.read(new File(path + "/Ground2.png")));
+
+            stand_R = ImageIO.read(new File(path+"/Walking_001.png"));
+            int width = stand_R.getWidth();
+            int height = stand_R.getHeight();
+            stand_L = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2d = stand_L.createGraphics();
+            g2d.drawImage(stand_R, 0, 0, width, height, width, 0, 0, height, null);
+            g2d.dispose();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -47,5 +57,24 @@ public class StaticValue {
 //                throw new RuntimeException(e);
 //            }
 //        }
+
+        for (int i = 1; i <= 18; i++) {
+            try {
+                if (i < 10) {
+                    run_R.add(ImageIO.read(new File(path + "/Walking_00" + i + ".png")));
+                } else {
+                    run_R.add(ImageIO.read(new File(path + "/Walking_0" + i + ".png")));
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        //try {
+        //    obstacle.add(ImageIO.read(new File(path + "")));
+        //    obstacle.add(ImageIO.read(new File(path + "")));
+        //} catch (IOException e) {
+        //    throw new RuntimeException(e);
+        //}
     }
 }
+
