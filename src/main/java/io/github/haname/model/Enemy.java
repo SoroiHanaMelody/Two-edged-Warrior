@@ -49,8 +49,6 @@ public class Enemy extends JPanel {
         walkRightAnim.forEach(image -> walkLeftAnim.add(ImageUtils.INSTANCE.flipHorizontal(image)));
     }
 
-    Runnable wl = new EnemyMoveTask.walkL();
-    EnemyMoveTask.walkR wr = new EnemyMoveTask.walkR();
     //储存当前坐标
     private int x, y;
     //储存敌人类型
@@ -128,14 +126,22 @@ public class Enemy extends JPanel {
 
         if (type == 1) {
             if (faceTo) {
-                this.x += 10;
+                this.x += 2;
             } else {
-                this.x -= 10;
+                this.x -= 2;
             }
 
-            imageType = imageType == 1 ? 0 : 1;
+            if (faceTo) {
+                imageType = (imageType + 1) % Enemy.walkRightAnim.size();
 
-            show = walkRightAnim.get(imageType);
+                show = Enemy.walkRightAnim.get(imageType);
+            } else {
+                imageType = (imageType + 1) % Enemy.walkLeftAnim.size();
+
+                show = Enemy.walkLeftAnim.get(imageType);
+            }
+
+            revalidate();
 
             //addToPanel(bg.getEnemyPanel(),show,this.x,this.y);
 
@@ -149,21 +155,21 @@ public class Enemy extends JPanel {
                 }
 
                 //判断是否可以向左走
-                if (ob1.getX() == this.x - 60 && (ob1.getY() + 60 > this.y && ob1.getY() - 60 < this.y)) {
+                if (ob1.getX() == this.x && (ob1.getY() + 60 > this.y && ob1.getY() - 60 < this.y)) {
                     canLeft = false;
                 }
             }
 
             if ((!faceTo) && (!canLeft) || this.x == 0) {
                 faceTo = true;
-            } else if (faceTo && (!canRight) || this.x == 810) {
+            } else if (faceTo && (!canRight) || this.x == 1440) {
                 faceTo = false;
             }
 
-            System.out.println(type);
-            System.out.println(faceTo);
-            System.out.println(x);
-            System.out.println(imageType);
+            //System.out.println(type);
+            //System.out.println(faceTo);
+            //System.out.println(x);
+            //System.out.println(imageType);
         }
 //        for (int i = 0; i < bg.getObstacleList().size(); i++) {
 //            Obstacle ob1 = bg.getObstacleList().get(i);
@@ -209,10 +215,11 @@ public class Enemy extends JPanel {
 //    }
 
     @Override
-    protected void paintComponent(Graphics g) {
+    public void paint(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g.create();
         g2d.drawImage(show, x, y, this);
-        g2d.dispose();
+        System.out.println("now x = " + x);
+        System.out.println("now y = " + y);
     }
 }

@@ -10,6 +10,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class BackGround extends JFrame {
     public static List<BufferedImage> backGroundImages = new ArrayList<>();
@@ -91,8 +94,18 @@ public class BackGround extends JFrame {
         enemyPanel.setBounds(0, 0, 1440, 810); // 设置面板位置
 
         //添加敌人
-        Enemy enemy =new Enemy(80, 500, true, 1, this);
+        Enemy enemy =new Enemy(80, 503, true, 1, this);
         enemyList.add(enemy);
+
+        //尝试重绘
+//        ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+//
+//        Runnable task = () -> {
+//            repaint();
+//            System.out.println("Try repaint");
+//        };
+//
+//        executor.scheduleAtFixedRate(task, 0, 50, TimeUnit.MILLISECONDS);
     }
 
 

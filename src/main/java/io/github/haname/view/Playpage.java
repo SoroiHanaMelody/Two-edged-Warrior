@@ -13,6 +13,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class Playpage extends JFrame implements KeyListener {
@@ -45,10 +47,21 @@ public class Playpage extends JFrame implements KeyListener {
         }
         //将第一个场景设置为当前场景
         nowBg = allBg.get(0);
-        nowBg.getEnemyList().forEach(enemy -> TaskManager.INSTANCE.scheduleWithFixedDelay("enemyMove", new EnemyMoveTask(enemy), 0, 50, TimeUnit.MILLISECONDS));
+        //生成一个敌人
+        nowBg.getEnemyList().forEach(enemy -> TaskManager.INSTANCE.scheduleWithFixedDelay("enemyMove", new EnemyMoveTask(enemy), 0, 25, TimeUnit.MILLISECONDS));
 
         //绘制图像
-        repaint();
+        //repaint();
+
+        //尝试重绘
+        ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+
+        Runnable task = () -> {
+            repaint();
+            //System.out.println("Try repaint");
+        };
+
+        executor.scheduleAtFixedRate(task, 0, 1, TimeUnit.MILLISECONDS);
     }
 
     @Override
