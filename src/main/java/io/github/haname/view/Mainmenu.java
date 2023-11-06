@@ -10,7 +10,6 @@ import java.io.IOException;
 
 public class Mainmenu extends JFrame implements KeyListener {
     private String playerName1 = "Player";
-
     public Mainmenu() {
         this.setSize(1440, 810);//设置窗口大小
         this.setLocationRelativeTo(null);//设置窗口居中
@@ -121,6 +120,12 @@ public class Mainmenu extends JFrame implements KeyListener {
         constraints.gridx = 0;
         constraints.gridy = position;
         panel.add(button, constraints);
+    }
+
+
+
+    public static void main(String[] args) {
+        Mainmenu mainmenu = new Mainmenu();
     }
 
     @Override
