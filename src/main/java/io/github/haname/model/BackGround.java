@@ -54,6 +54,7 @@ public class BackGround extends JFrame {
     //存放所有敌人
     private List<Enemy> enemyList = new ArrayList<>();
 
+
     private JPanel enemyPanel;
 
     private Enemy enemy;

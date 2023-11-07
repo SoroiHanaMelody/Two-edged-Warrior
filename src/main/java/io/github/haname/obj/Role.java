@@ -1,7 +1,7 @@
-package obj;
+package io.github.haname.obj;
 
 import io.github.haname.StaticValue;
-import io.github.haname.view.BackGround;
+import io.github.haname.model.BackGround;
 
 import java.awt.image.BufferedImage;
 

@@ -122,12 +122,6 @@ public class Mainmenu extends JFrame implements KeyListener {
         panel.add(button, constraints);
     }
 
-
-
-    public static void main(String[] args) {
-        Mainmenu mainmenu = new Mainmenu();
-    }
-
     @Override
     public void keyTyped(KeyEvent e) {
 

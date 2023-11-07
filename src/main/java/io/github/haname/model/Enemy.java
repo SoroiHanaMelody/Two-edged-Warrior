@@ -1,8 +1,11 @@
 package io.github.haname.model;
 
+//import com.sun.org.apache.xpath.internal.operations.Bool;
 import io.github.haname.StaticValue;
+import io.github.haname.obj.Role;
 import io.github.haname.service.image.ImageUtils;
 import io.github.haname.service.task.EnemyMoveTask;
+//import sun.util.BuddhistCalendar;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -11,6 +14,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -20,17 +24,28 @@ public class Enemy extends JPanel {
     public static List<BufferedImage> walkRightAnim = new ArrayList<>();
     //怪物向左走动画
     public static List<BufferedImage> walkLeftAnim = new ArrayList<>();
+    //怪物向右攻击动画
+    public static List<BufferedImage> attackRightAnim = new ArrayList<>();
+    //怪物向左攻击动画
+    public static List<BufferedImage> attackLeftAnim = new ArrayList<>();
+
 
     static {
-        URL animResource = Enemy.class.getResource("/images/death_knight/walking");
-        if (animResource == null) {
+        URL walkAnimResource = Enemy.class.getResource("/images/death_knight/walking");
+        if (walkAnimResource == null) {
             throw new RuntimeException("Cannot find resource: /images/death_knight/walking");
         }
+        URL attackAnimResource = Enemy.class.getResource("/images/death_knight/attacking");
+        if (attackAnimResource == null) {
+            throw new RuntimeException("Cannot find resource: /images/death_knight/attacking");
+        }
 
-        File animFile = new File(animResource.getFile());
-        File[] animFiles = animFile.listFiles(file -> file.getName().startsWith("0_Death_Knight_Walking_") && file.getName().endsWith(".png"));
-        if (animFiles != null) {
-            Arrays.stream(animFiles)
+        File walkAnimFile = new File(walkAnimResource.getFile());
+        File attackAnimFile = new File(attackAnimResource.getFile());
+        File[] walkAnimFiles = walkAnimFile.listFiles(file -> file.getName().startsWith("0_Death_Knight_Walking_") && file.getName().endsWith(".png"));
+        File[] attackAnimFiles = attackAnimFile.listFiles(file -> file.getName().startsWith("attacking_") && file.getName().endsWith(".png"));
+        if (walkAnimFiles != null) {
+            Arrays.stream(walkAnimFiles)
                     .sorted((o1, o2) -> {
                         String o1Name = o1.getName();
                         String o2Name = o2.getName();
@@ -45,8 +60,25 @@ public class Enemy extends JPanel {
                         }
                     });
         }
+        if (attackAnimFiles != null) {
+            Arrays.stream(attackAnimFiles)
+                    .sorted((o1, o2) -> {
+                        String o1Name = o1.getName();
+                        String o2Name = o2.getName();
+                        int o1Index = Integer.parseInt(o1Name.substring(o1Name.lastIndexOf("_") + 1, o1Name.lastIndexOf(".")));
+                        int o2Index = Integer.parseInt(o2Name.substring(o2Name.lastIndexOf("_") + 1, o2Name.lastIndexOf(".")));
+                        return Integer.compare(o1Index, o2Index);
+                    }).forEach(file -> {
+                        try {
+                            attackRightAnim.add(ImageIO.read(file));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    });
+        }
 
         walkRightAnim.forEach(image -> walkLeftAnim.add(ImageUtils.INSTANCE.flipHorizontal(image)));
+        attackRightAnim.forEach(image -> attackLeftAnim.add(ImageUtils.INSTANCE.flipHorizontal(image)));
     }
 
     //储存当前坐标
@@ -89,13 +121,6 @@ public class Enemy extends JPanel {
         this.maxDown = maxDown;
         this.bg = bg;
         show = StaticValue.enemy2.get(0);
-    }
-
-    public void addToPanel(JPanel panel, BufferedImage show, int x, int y) {
-        JLabel label = new JLabel(new ImageIcon(this.show));
-        label.setBounds(this.x, this.y, this.show.getWidth(), this.show.getHeight()); // 根据需要设置位置
-        panel.add(label);
-        repaint();
     }
 
     //死亡方法
@@ -141,12 +166,6 @@ public class Enemy extends JPanel {
                 show = Enemy.walkLeftAnim.get(imageType);
             }
 
-            revalidate();
-
-            //addToPanel(bg.getEnemyPanel(),show,this.x,this.y);
-
-            //show.displayEnemyImage;
-
             for (int i = 0; i < bg.getObstacleList().size(); i++) {
                 Obstacle ob1 = bg.getObstacleList().get(i);
                 //判断是否可以向右走
@@ -171,48 +190,32 @@ public class Enemy extends JPanel {
             //System.out.println(x);
             //System.out.println(imageType);
         }
-//        for (int i = 0; i < bg.getObstacleList().size(); i++) {
-//            Obstacle ob1 = bg.getObstacleList().get(i);
-//            //判断是否可以向右走
-//            if (ob1.getX() == this.x + 60 && (ob1.getY() + 60 > this.y && ob1.getY() - 60 < this.y)) {
-//                canRight = false;
-//            }
-//
-//            //判断是否可以向左走
-//            if (ob1.getX() == this.x - 60 && (ob1.getY() + 60 > this.y && ob1.getY() - 60 < this.y)) {
-//                canLeft = false;
-//            }
-//        }
-
-//        if ((!faceTo) && (!canLeft) || this.x == 0) {
-//            faceTo = true;
-//        } else if (faceTo && (!canRight) || this.x == 810) {
-//            faceTo = false;
-//        }
-//
-//            System.out.println(type);
-//            System.out.println(faceTo);
-//            System.out.println(x);
-//            System.out.println(imageType);
-//            System.out.println(canLeft);
-//            System.out.println(canRight);
-//        }
     }
 
-//    @Override
-//    public void paint(Graphics g) {
-//        if (offScreeenImage == null) {
-//            offScreeenImage = createImage(show.getWidth(), show.getHeight());
-//        }
-//
-//        Graphics2D graphics = (Graphics2D) offScreeenImage.getGraphics();
-//        AlphaComposite alphaComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f); // 透明度设置为0.5
-//        graphics.setComposite(alphaComposite);
-//        graphics.setColor(new Color(0, 0, 0, 0)); // 使用透明色
-//        graphics.fillRect(0, 0, 1440, 810);
-//
-//        graphics.drawImage(getShow(), getX(), getY(), this);
-//    }
+    public void attack() {
+        Boolean attackRight = false;
+        Boolean attackLeft = false;
+            Role role = bg.getRole();
+            //判断是否可以向右攻击
+            if (role.getX() == this.x + 60 + 20 && (role.getY() + 60 > this.y && role.getY() - 60 < this.y)) {
+                if (faceTo) {
+                    attackRight = true;
+                } else {
+                    faceTo = true;
+                    attackRight = true;
+                }
+            }
+
+            //判断是否可以向左攻击
+            if (role.getX() == this.x && (role.getY() + 60 > this.y && role.getY() - 60 < this.y)) {
+                if (!faceTo) {
+                    attackLeft = true;
+                } else {
+                    faceTo = false;
+                    attackLeft = true;
+                }
+            }
+    }
 
     @Override
     public void paint(Graphics g) {
