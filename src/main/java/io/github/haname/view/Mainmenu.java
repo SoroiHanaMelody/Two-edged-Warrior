@@ -56,15 +56,18 @@ public class Mainmenu extends JFrame implements KeyListener {
         closeButton.addActionListener(e -> System.exit(0));
 
         start.addActionListener(e -> {
-            Playpage playpage = new Playpage();
+            Playpage playpage;
+            try {
+                playpage = new Playpage();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
             playpage.setVisible(true);
             Mainmenu.this.dispose();
         });
 
-        setting.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        setting.addActionListener(e -> {
 
-            }
         });
 
         player.addActionListener(e -> {
@@ -90,13 +93,10 @@ public class Mainmenu extends JFrame implements KeyListener {
 
             CustomButton confirm = new CustomButton("Confirm", 80, 30, 5, 5, "/hover1.wav", "/press1.wav");
             playerInf.add(confirm, constraints);
-            confirm.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    playerName1 = playerName.getText();
-                    player.setText(playerName1);
-                    playerInf.dispose();
-                }
+            confirm.addActionListener(e1 -> {
+                playerName1 = playerName.getText();
+                player.setText(playerName1);
+                playerInf.dispose();
             });
 
             playerInf.add(playerName);
@@ -107,10 +107,6 @@ public class Mainmenu extends JFrame implements KeyListener {
 
 
 }
-
-    public static void main(String[] args) {
-        Mainmenu mainmenu = new Mainmenu();
-    }
 
     private void addButton(JPanel panel, JButton button, int position) {
         GridBagConstraints constraints = new GridBagConstraints();

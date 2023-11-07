@@ -6,16 +6,12 @@ import io.github.haname.model.Enemy;
 import io.github.haname.model.Obstacle;
 import io.github.haname.service.manager.TaskManager;
 import io.github.haname.service.task.EnemyMoveTask;
-import io.github.haname.view.CustomButton;
 import obj.Role;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.image.ImageObserver;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +28,7 @@ public class Playpage extends JFrame implements KeyListener,Runnable {
     private Image offScreeenImage = null;
     private Role role = new Role();
     private Thread thread=new Thread(this);
+
 
     public Playpage() throws IOException {
         this.setSize(1440, 810);//设置窗口大小
@@ -85,6 +82,7 @@ public class Playpage extends JFrame implements KeyListener,Runnable {
         //绘制图像
         repaint();
         thread.start();
+        this.requestFocus();
     }
 
     @Override
@@ -125,12 +123,16 @@ public class Playpage extends JFrame implements KeyListener,Runnable {
 
     @Override
     public void keyPressed(KeyEvent e) {
-
+        int keyCode = e.getKeyCode();
+        System.out.println("Key pressed: " + KeyEvent.getKeyText(keyCode));
+        role.keyPressed(e);
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-
+        int keyCode = e.getKeyCode();
+        System.out.println("Key released: " + KeyEvent.getKeyText(keyCode));
+        role.keyReleased(e);
     }
     @Override
     public void run() {
