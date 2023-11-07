@@ -1,5 +1,7 @@
 package io.github.haname.model;
 
+import io.github.haname.obj.Role;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -53,6 +55,12 @@ public class BackGround extends JFrame {
 
     //存放所有敌人
     private List<Enemy> enemyList = new ArrayList<>();
+
+    public Role getRole() {
+        return role;
+    }
+
+    private Role role = new Role();
 
 
     private JPanel enemyPanel;

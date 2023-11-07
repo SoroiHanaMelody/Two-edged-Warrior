@@ -4,7 +4,6 @@ package io.github.haname.model;
 import io.github.haname.StaticValue;
 import io.github.haname.obj.Role;
 import io.github.haname.service.image.ImageUtils;
-import io.github.haname.service.task.EnemyMoveTask;
 //import sun.util.BuddhistCalendar;
 
 import javax.imageio.ImageIO;
@@ -14,7 +13,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -28,6 +26,10 @@ public class Enemy extends JPanel {
     public static List<BufferedImage> attackRightAnim = new ArrayList<>();
     //怪物向左攻击动画
     public static List<BufferedImage> attackLeftAnim = new ArrayList<>();
+    //怪物右死亡动画
+    public static List<BufferedImage> dieRightAnim = new ArrayList<>();
+    //怪物左死亡动画
+    public static List<BufferedImage> dieLeftAnim = new ArrayList<>();
 
 
     static {
@@ -39,11 +41,17 @@ public class Enemy extends JPanel {
         if (attackAnimResource == null) {
             throw new RuntimeException("Cannot find resource: /images/death_knight/attacking");
         }
+        URL dieAnimResource = Enemy.class.getResource("/images/death_knight/dying");
+        if (attackAnimResource == null) {
+            throw new RuntimeException("Cannot find resource: /images/death_knight/dying");
+        }
 
         File walkAnimFile = new File(walkAnimResource.getFile());
         File attackAnimFile = new File(attackAnimResource.getFile());
+        File dieAnimFile = new File(dieAnimResource.getFile());
         File[] walkAnimFiles = walkAnimFile.listFiles(file -> file.getName().startsWith("0_Death_Knight_Walking_") && file.getName().endsWith(".png"));
         File[] attackAnimFiles = attackAnimFile.listFiles(file -> file.getName().startsWith("attacking_") && file.getName().endsWith(".png"));
+        File[] dieAnimFiles = dieAnimFile.listFiles(file -> file.getName().startsWith("attacking_") && file.getName().endsWith(".png"));
         if (walkAnimFiles != null) {
             Arrays.stream(walkAnimFiles)
                     .sorted((o1, o2) -> {
@@ -76,9 +84,26 @@ public class Enemy extends JPanel {
                         }
                     });
         }
+        if (dieAnimFiles != null) {
+            Arrays.stream(dieAnimFiles)
+                    .sorted((o1, o2) -> {
+                        String o1Name = o1.getName();
+                        String o2Name = o2.getName();
+                        int o1Index = Integer.parseInt(o1Name.substring(o1Name.lastIndexOf("_") + 1, o1Name.lastIndexOf(".")));
+                        int o2Index = Integer.parseInt(o2Name.substring(o2Name.lastIndexOf("_") + 1, o2Name.lastIndexOf(".")));
+                        return Integer.compare(o1Index, o2Index);
+                    }).forEach(file -> {
+                        try {
+                            dieRightAnim.add(ImageIO.read(file));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    });
+        }
 
         walkRightAnim.forEach(image -> walkLeftAnim.add(ImageUtils.INSTANCE.flipHorizontal(image)));
         attackRightAnim.forEach(image -> attackLeftAnim.add(ImageUtils.INSTANCE.flipHorizontal(image)));
+        dieRightAnim.forEach(image -> dieLeftAnim.add(ImageUtils.INSTANCE.flipHorizontal(image)));
     }
 
     //储存当前坐标
@@ -214,6 +239,18 @@ public class Enemy extends JPanel {
                     faceTo = false;
                     attackLeft = true;
                 }
+            }
+
+            if (attackRight) {
+                for (int i = 1; i < attackRightAnim.size(); i ++) {
+                    show = Enemy.attackRightAnim.get(i);
+                }
+                attackRight = false;
+            } else if (attackLeft) {
+                for (int j = 1; j < attackLeftAnim.size(); j ++) {
+                    show = Enemy.attackLeftAnim.get(j);
+                }
+                attackLeft = false;
             }
     }
 
