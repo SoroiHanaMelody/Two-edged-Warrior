@@ -3,9 +3,13 @@ package io.github.haname.obj;
 import io.github.haname.StaticValue;
 import io.github.haname.model.BackGround;
 
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
-public class Role implements Runnable {
+public class Role implements Runnable, KeyListener {
     private int x;
     private int y;
     private String status;
@@ -13,9 +17,15 @@ public class Role implements Runnable {
     private BackGround backGround = new BackGround();
     private Thread thread = null;
     private int xSpeed;
+    private int targetXSpeed;
     private int ySpeed;
     private int index;
     private boolean face_to = true;
+    private float acceleration = 2f;
+    private ExecutorService executorService = Executors.newSingleThreadExecutor();
+
+    private int upTime=0;
+    private int blood;
 
     public Role() {
 
@@ -24,46 +34,28 @@ public class Role implements Runnable {
     public Role(int x, int y) {
         this.x = x;
         this.y = y;
-        show = StaticValue.stand_R;
+        show = StaticValue.stand_L;
         this.status = "stand-right";
-        thread = new Thread(this);
-        thread.start();
+        executorService.submit(this::moveLogic);
     }
 
+
     public void leftMove() {
-        xSpeed = -6;
-        if (status.indexOf("jump") != 1) {
-            status = "jump--left";
-        } else {
-            status = "move--left";
-        }
+        targetXSpeed = -10;
     }
 
     public void rightMove() {
-        xSpeed = 6;
-        if (status.indexOf("jump") != 1) {
-            status = "jump--right";
-        } else {
-            status = "move--right";
-        }
+        targetXSpeed = 10;
     }
-
+    public void jump(){
+        ySpeed=-15;
+    }
     public void leftStop() {
-        xSpeed = 0;
-        if (status.indexOf("jump") != 1) {
-            status = "jump--left";
-        } else {
-            status = "stop--left";
-        }
+        targetXSpeed = 0;
     }
 
     public void rightStop() {
-        xSpeed = 0;
-        if (status.indexOf("jump") != 1) {
-            status = "jump--right";
-        } else {
-            status = "stop--right";
-        }
+        targetXSpeed = 0;
     }
 
     public String getStatus() {
@@ -105,24 +97,47 @@ public class Role implements Runnable {
     public void setFace_to(boolean face_to) {
         this.face_to = face_to;
     }
-
-    @Override
-    public void run() {
+    private void moveLogic() {
         while (true) {
-            if (xSpeed < 0 || xSpeed > 0) {
-                x+= xSpeed;
-                if (x < 0) {
-                    x = 0;
+            if (xSpeed != targetXSpeed) {
+                if (xSpeed < targetXSpeed) {
+                    xSpeed += acceleration;
+                } else {
+                    xSpeed -= acceleration;
                 }
             }
+            x += xSpeed;
+            y +=ySpeed;
+            if (ySpeed < 10) {
+                ySpeed += 1;
+            }
+            if (y > 500) {
+                // 角色着陆，重置y轴位置和y轴速度
+                y = 500;
+                ySpeed = 0;
+            }
+            if (xSpeed == 0 || ySpeed ==0) {
+                status = "stand-right";
+            } else if (xSpeed > 0 || ySpeed ==0) {
+                status = "move--right";
+            } else if (xSpeed < 0 || ySpeed ==0){
+                status = "move--left";
+            }else if (xSpeed > 0 || ySpeed !=0) {
+                status = "jump--right";
+            } else if (xSpeed < 0 || ySpeed !=0){
+                status = "jump--left";
+            }
+
             if (status.contains("move")) {
                 index=index==0?1:0;
             }
             if ("move--left".equals(status)){
-                show=StaticValue.run_L.get(index);
+                //show=StaticValue.run_L.get(index);
+                show=StaticValue.stand_L;
             }
             if ("move--right".equals(status)){
-                show=StaticValue.run_R.get(index);
+                //show=StaticValue.run_R.get(index);
+                show=StaticValue.stand_R;
             }
             if ("stop--left".equals(status)){
                 show=StaticValue.stand_L;
@@ -130,6 +145,15 @@ public class Role implements Runnable {
             if ("stop--right".equals(status)){
                 show=StaticValue.stand_R;
             }
+            if("jump--left".equals(status)){
+                //show=StaticValue.jump_L;
+                show=StaticValue.stand_L;
+            }
+            if("jump--right".equals(status)){
+                //show=StaticValue.jump_R;
+                show=StaticValue.run_R.get(index);
+            }
+
             try{
                 Thread.sleep(20);
             }catch (InterruptedException e){
@@ -137,6 +161,9 @@ public class Role implements Runnable {
             }
         }
     }
+
+    @Override
+    public synchronized void run() {}
     public int getX() {
         return x;
     }
@@ -175,5 +202,35 @@ public class Role implements Runnable {
 
     public void setySpeed(int ySpeed) {
         this.ySpeed = ySpeed;
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        int keyCode = e.getKeyCode();
+        if (keyCode == KeyEvent.VK_A) {
+            leftMove();
+        }
+        if (keyCode == KeyEvent.VK_D) {
+            rightMove();
+        }
+        if(keyCode == KeyEvent.VK_K){
+            jump();
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        int keyCode = e.getKeyCode();
+        if (keyCode == KeyEvent.VK_A) {
+            leftStop();
+        }
+        if (keyCode == KeyEvent.VK_D) {
+            rightStop();
+        }
     }
 }
