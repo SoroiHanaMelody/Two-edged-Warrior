@@ -4,9 +4,14 @@ import io.github.haname.model.BackGround;
 import io.github.haname.model.Enemy;
 
 import java.awt.image.BufferedImage;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class EnemyMoveTask implements Runnable {
     private final Enemy enemy;
+    private volatile boolean alive = true;
+
 
     public EnemyMoveTask(Enemy enemy) {
         this.enemy = enemy;
@@ -14,7 +19,12 @@ public class EnemyMoveTask implements Runnable {
 
     @Override
     public void run() {
-        enemy.move();
+        while (alive) {
+            enemy.move();
+        }
+        if (enemy.getHp() == 0) {
+            alive = false;
+        }
     }
 
 

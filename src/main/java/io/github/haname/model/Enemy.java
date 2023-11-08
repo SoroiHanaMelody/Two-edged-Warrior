@@ -4,6 +4,7 @@ package io.github.haname.model;
 import io.github.haname.StaticValue;
 import io.github.haname.obj.Role;
 import io.github.haname.service.image.ImageUtils;
+import io.github.haname.view.Playpage;
 //import sun.util.BuddhistCalendar;
 
 import javax.imageio.ImageIO;
@@ -16,6 +17,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class Enemy extends JPanel {
     //怪物向右走动画
@@ -126,6 +130,8 @@ public class Enemy extends JPanel {
 
     private Image offScreeenImage = null;
 
+    private int hp = 100;
+
     //敌人1的构造函数
     public Enemy(int x, int y, boolean faceTo, int type, BackGround bg) {
         this.x = x;
@@ -149,10 +155,21 @@ public class Enemy extends JPanel {
     }
 
     //死亡方法
-//    public void death() {
-//        show = walkRightAnim.get(1);
-//        this.bg.getEnemyList().remove(this);
-//    }
+    public void death() {
+        if (hp == 0) {
+            if (faceTo) {
+                for (int i = 1; i < dieRightAnim.size(); i++) {
+                    show = Enemy.dieRightAnim.get(i);
+            }
+                this.bg.getEnemyList().remove(this);
+            } else {
+                for (int j = 1; j < dieLeftAnim.size(); j++) {
+                    show = Enemy.dieLeftAnim.get(j);
+                }
+                this.bg.getEnemyList().remove(this);
+            }
+        }
+    }
     public int getX() {
         return x;
     }
@@ -166,6 +183,8 @@ public class Enemy extends JPanel {
     }
 
     public int getType() {return type;}
+
+    public int getHp() {return hp;}
 
 
 
@@ -217,10 +236,13 @@ public class Enemy extends JPanel {
         }
     }
 
+    private final Lock lock = new ReentrantLock();
+    private final Condition condition = lock.newCondition();
     public void attack() {
         Boolean attackRight = false;
         Boolean attackLeft = false;
-            Role role = bg.getRole();
+
+            Role role = Playpage.getRole();
             //判断是否可以向右攻击
             if (role.getX() == this.x + 60 + 20 && (role.getY() + 60 > this.y && role.getY() - 60 < this.y)) {
                 if (faceTo) {
@@ -241,16 +263,31 @@ public class Enemy extends JPanel {
                 }
             }
 
-            if (attackRight) {
-                for (int i = 1; i < attackRightAnim.size(); i ++) {
-                    show = Enemy.attackRightAnim.get(i);
+            //用于暂停move来attack
+                lock.lock();
+            try {
+                if (attackRight || attackLeft) {
+                    condition.await();
                 }
-                attackRight = false;
-            } else if (attackLeft) {
-                for (int j = 1; j < attackLeftAnim.size(); j ++) {
-                    show = Enemy.attackLeftAnim.get(j);
+                // 执行其他任务
+                Thread.sleep(1000);
+                if (attackRight) {
+                    for (int i = 1; i < attackRightAnim.size(); i ++) {
+                        show = Enemy.attackRightAnim.get(i);
                 }
-                attackLeft = false;
+                    attackRight = false;
+                } else if (attackLeft) {
+                    for (int j = 1; j < attackLeftAnim.size(); j ++) {
+                        show = Enemy.attackLeftAnim.get(j);
+                    }
+                    attackLeft = false;
+                }
+                // 唤醒线程
+                condition.signal();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } finally {
+                lock.unlock();
             }
     }
 

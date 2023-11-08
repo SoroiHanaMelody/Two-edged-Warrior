@@ -107,6 +107,9 @@ public class Mainmenu extends JFrame implements KeyListener {
 
 
 }
+public  static void main(String[] args) {
+        Mainmenu mainmenu = new Mainmenu();
+}
 
     private void addButton(JPanel panel, JButton button, int position) {
         GridBagConstraints constraints = new GridBagConstraints();

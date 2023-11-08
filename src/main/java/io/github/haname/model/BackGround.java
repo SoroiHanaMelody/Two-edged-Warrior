@@ -56,11 +56,11 @@ public class BackGround extends JFrame {
     //存放所有敌人
     private List<Enemy> enemyList = new ArrayList<>();
 
-    public Role getRole() {
-        return role;
-    }
-
-    private Role role = new Role();
+//    public Role getRole() {
+//        return role;
+//    }
+//
+//    private Role role = new Role();
 
 
     private JPanel enemyPanel;

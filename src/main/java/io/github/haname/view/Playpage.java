@@ -6,7 +6,7 @@ import io.github.haname.model.Enemy;
 import io.github.haname.model.Obstacle;
 import io.github.haname.service.manager.TaskManager;
 import io.github.haname.service.task.EnemyMoveTask;
-import obj.Role;
+import io.github.haname.obj.Role;
 
 import javax.swing.*;
 import java.awt.*;
@@ -30,7 +30,8 @@ public class Playpage extends JFrame implements KeyListener,Runnable {
     private boolean Paused = false;
     //使用一个布尔标志来控制暂停
     private Image offScreeenImage = null;
-    private Role role = new Role();
+
+    private static Role role = new Role();
     private Thread thread=new Thread(this);
 
 
@@ -75,6 +76,7 @@ public class Playpage extends JFrame implements KeyListener,Runnable {
         layout.putConstraint(SpringLayout.NORTH, backButton, 10, SpringLayout.NORTH, getContentPane());
 
         StaticValue.init();
+        role = new Role(10, 355);
         for (int i = 1; i <= 2; i++) {
             allBg.add(new BackGround(i, i == 2));
         }
@@ -156,6 +158,9 @@ public class Playpage extends JFrame implements KeyListener,Runnable {
             }
         }
 
+    }
+    public static Role getRole() {
+        return role;
     }
 }
 
