@@ -12,9 +12,9 @@ import java.util.List;
 
 public class StaticValue {
     //人物左跳跃
-    public static BufferedImage jump_L = null;
+    public static List<BufferedImage> jump_L = new ArrayList<>();
     //人物右跳跃
-    public static BufferedImage jump_R = null;
+    public static List<BufferedImage> jump_R = new ArrayList<>();
     //人物左站立
     public static BufferedImage stand_L = null;
     //人物右站立
@@ -39,14 +39,11 @@ public class StaticValue {
             obstacle.add(ImageIO.read(new File(path + "/Ground1.png")));
             obstacle.add(ImageIO.read(new File(path + "/Ground2.png")));
 
-            stand_R = ImageIO.read(new File(path+"/role_walking/Walking_001.png"));
+            stand_R = ImageIO.read(new File(path+"/role/Walking/Walking_001.png"));
             int width = stand_R.getWidth();
             int height = stand_R.getHeight();
             stand_L = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-
             Graphics2D g2d = stand_L.createGraphics();
-
-// 使用AffineTransform对图像进行水平翻转
             AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
             tx.translate(-width, 0);
             g2d.transform(tx);
@@ -69,11 +66,14 @@ public class StaticValue {
 
         for (int i = 1; i <= 18; i++) {
             try {
-                if (i < 10) {
-                    run_R.add(ImageIO.read(new File(path + "/role_walking/Walking_00" + i + ".png")));
-                } else {
-                    run_R.add(ImageIO.read(new File(path + "/role_walking/Walking_0" + i + ".png")));
-                }
+                run_R.add(ImageIO.read(new File(path + "/role/Walking/Walking_0" + String.format("%02d", i) + ".png")));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        for (int i = 0; i <= 5; i++) {
+            try {
+                jump_R.add(ImageIO.read(new File(path + "/role/Jump Start/Jump Start_0" + String.format("%02d", i) + ".png")));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

@@ -3,6 +3,9 @@ package obj;
 import io.github.haname.StaticValue;
 import io.github.haname.model.BackGround;
 
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
@@ -23,7 +26,8 @@ public class Role implements Runnable, KeyListener {
     private boolean face_to = true;
     private float acceleration = 2f;
     private ExecutorService executorService = Executors.newSingleThreadExecutor();
-
+    private boolean canJump=true;
+    private Timer animationTimer;
     private int upTime=0;
     private int blood;
 
@@ -38,17 +42,23 @@ public class Role implements Runnable, KeyListener {
         this.status = "stand-right";
         executorService.submit(this::moveLogic);
     }
+        // 其他初始化代码
 
 
     public void leftMove() {
-        targetXSpeed = -10;
+        targetXSpeed = -6;
+        face_to = false;
     }
 
     public void rightMove() {
-        targetXSpeed = 10;
+        targetXSpeed = 6;
+        face_to=true;
     }
     public void jump(){
+        if(canJump){
         ySpeed=-15;
+        canJump=false;
+        }
     }
     public void leftStop() {
         targetXSpeed = 0;
@@ -108,17 +118,24 @@ public class Role implements Runnable, KeyListener {
             }
             x += xSpeed;
             y +=ySpeed;
-            if (ySpeed < 10) {
+            if (ySpeed < 15) {
                 ySpeed += 1;
             }
             if (y > 500) {
                 // 角色着陆，重置y轴位置和y轴速度
                 y = 500;
                 ySpeed = 0;
+                canJump=true;
             }
-            if (xSpeed == 0 || ySpeed ==0) {
-                status = "stand-right";
-            } else if (xSpeed > 0 || ySpeed ==0) {
+            if (xSpeed == 0 || ySpeed == 0) {
+                if (face_to) {
+                    status = "stand-right";
+                    show = StaticValue.stand_R;
+                } else {
+                    status = "stand-left";
+                    show = StaticValue.stand_L;
+                }
+            }else if (xSpeed > 0 || ySpeed ==0) {
                 status = "move--right";
             } else if (xSpeed < 0 || ySpeed ==0){
                 status = "move--left";
@@ -136,8 +153,7 @@ public class Role implements Runnable, KeyListener {
                 show=StaticValue.stand_L;
             }
             if ("move--right".equals(status)){
-                //show=StaticValue.run_R.get(index);
-                show=StaticValue.stand_R;
+                show=StaticValue.run_R.get(index);
             }
             if ("stop--left".equals(status)){
                 show=StaticValue.stand_L;
